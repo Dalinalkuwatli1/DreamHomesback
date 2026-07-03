@@ -17,15 +17,17 @@ const createTokens = (id) => ({
 });
 
 // ─── Register ────────────────────────────────────────────────────
-const register = async ({ name, email, password, phone }) => {
+const register = async ({ name, email, password, phone, role }) => {
   const exists = await repo.findByEmail(email);
   if (exists) throw new AppError('Email already in use', 409);
 
   const hashedPassword = await bcrypt.hash(password, 12);
-  const user = await repo.create({ name, email, password: hashedPassword, phone });
+  // Accept role from frontend (USER or OWNER), default to USER
+  const userRole = role && ['USER', 'OWNER'].includes(role.toUpperCase()) ? role.toUpperCase() : 'USER';
+  const user = await repo.create({ name, email, password: hashedPassword, phone, role: userRole });
 
   const tokens = createTokens(user.id);
-  return { user: { id: user.id, name: user.name, email: user.email, role: user.role }, ...tokens };
+  return { user: { id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone, avatar: user.avatar }, ...tokens };
 };
 
 // ─── Login ───────────────────────────────────────────────────────
@@ -37,7 +39,7 @@ const login = async ({ email, password }) => {
   if (user.isBanned) throw new AppError('Your account has been suspended', 403);
 
   const tokens = createTokens(user.id);
-  return { user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar }, ...tokens };
+  return { user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar, phone: user.phone }, ...tokens };
 };
 
 // ─── Get Me ──────────────────────────────────────────────────────
@@ -50,7 +52,7 @@ const getMe = async (id) => {
 // ─── Update Me ───────────────────────────────────────────────────
 const updateMe = async (id, data) => {
   const filtered = {};
-  ['name', 'phone', 'bio'].forEach(f => { if (data[f] !== undefined) filtered[f] = data[f]; });
+  ['name', 'phone', 'bio', 'role'].forEach(f => { if (data[f] !== undefined) filtered[f] = data[f]; });
   return repo.updateById(id, filtered);
 };
 

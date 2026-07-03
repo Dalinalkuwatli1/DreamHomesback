@@ -9,7 +9,13 @@ const buildQuery = (query) => {
   const limit = parseInt(query.limit) || 12;
   const skip  = (page - 1) * limit;
 
-  const where = { status: 'ACTIVE' };
+  const where = {};
+  if (query.ownerId) {
+    where.ownerId = parseInt(query.ownerId);
+    if (query.status) where.status = query.status;
+  } else {
+    where.status = 'ACTIVE';
+  }
   if (query.type)     where.type = query.type;
   if (query.city)     where.city = { contains: query.city, mode: 'insensitive' };
   if (query.minPrice) where.price = { ...where.price, gte: parseFloat(query.minPrice) };
