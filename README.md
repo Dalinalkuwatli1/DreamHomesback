@@ -218,6 +218,31 @@ npm run dev
 
 ---
 
+## 🔌 Frontend Integration
+
+To connect your React / Vite frontend application to this backend API, configure the following setting in your frontend environment.
+
+### 1. Environment Variable (`.env`)
+In your frontend project root directory:
+```env
+VITE_API_URL=https://dreamhomesback.onrender.com/api
+```
+
+### 2. Axios Instance Setup
+Ensure CORS credentials are enabled to allow HTTP-only cookies (refresh tokens) to pass:
+```javascript
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true // Required for HTTP-only cookies / Refresh Tokens
+});
+
+export default api;
+```
+
+---
+
 # 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
