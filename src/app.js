@@ -57,7 +57,11 @@ const authLimiter = rateLimit({
   message: { success: false, message: 'Too many auth attempts, please try again later.' },
 });
 
-// ─── Health Check ────────────────────────────────────────────────
+// ─── Health Check & Root Route ────────────────────────────────────
+app.get('/', (req, res) => {
+  res.json({ success: true, message: '🏠 DreamHomes Backend API is running 🚀' });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: '🏠 DreamHomes API is running', timestamp: new Date() });
 });

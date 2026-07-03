@@ -87,7 +87,8 @@ Create a `.env` file in the root directory and copy the contents from `.env.exam
 PORT=5000
 NODE_ENV=development
 
-DATABASE_URL="mysql://root:yourpassword@localhost:3306/dreamhomes_db"
+DATABASE_URL="postgresql://postgres.xxxxx:PASSWORD@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.xxxxx:PASSWORD@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
 
 JWT_SECRET="your_jwt_secret"
 JWT_EXPIRES_IN=7d
@@ -98,6 +99,13 @@ CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name"
 CLOUDINARY_API_KEY="your_cloudinary_api_key"
 CLOUDINARY_API_SECRET="your_cloudinary_api_secret"
 ```
+
+## 🗄️ Database Configuration
+
+This project is configured to use **Supabase PostgreSQL**. To support serverless connection pooling, two environment variables are required:
+
+- `DATABASE_URL`: Used by the application at runtime (pointing to the Connection Pooler on port `6543` with `?pgbouncer=true`).
+- `DIRECT_URL`: Used by Prisma for schema operations (`db push`, migrations, etc.) directly to port `5432`.
 
 ### 4. Prisma Sync
 Synchronize the models with your database:
