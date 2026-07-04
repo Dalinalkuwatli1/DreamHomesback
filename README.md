@@ -102,10 +102,10 @@ CLOUDINARY_API_SECRET="your_cloudinary_api_secret"
 
 ## 🗄️ Database Configuration
 
-This project is configured to use **Supabase PostgreSQL**. To support serverless connection pooling, two environment variables are required:
+This project is configured to use **Supabase PostgreSQL**. Use the **Session Pooler (port 5432)** for both `DATABASE_URL` and `DIRECT_URL`:
 
-- `DATABASE_URL`: Used by the application at runtime (pointing to the Connection Pooler on port `6543` with `?pgbouncer=true`).
-- `DIRECT_URL`: Used by Prisma for schema operations (`db push`, migrations, etc.) directly to port `5432`.
+- `DATABASE_URL`: Used by the application at runtime. Use port `5432` (Session Pooler).
+- `DIRECT_URL`: Used by Prisma for schema operations (`db push`, migrations). Also port `5432`.
 
 ### 4. Prisma Sync
 Synchronize the models with your database:
