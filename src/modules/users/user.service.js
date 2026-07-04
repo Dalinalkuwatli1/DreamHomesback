@@ -2,6 +2,8 @@
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
 const crypto   = require('crypto');
+const { PrismaClient } = require('@prisma/client');
+const prisma   = new PrismaClient();
 const AppError = require('../../utils/AppError');
 const repo     = require('./user.repository');
 
@@ -27,7 +29,14 @@ const register = async ({ name, email, password, phone, role }) => {
   const user = await repo.create({ name, email, password: hashedPassword, phone, role: userRole });
 
   const tokens = createTokens(user.id);
-  return { user: { id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone, avatar: user.avatar }, ...tokens };
+  return {
+    user: {
+      id: user.id, name: user.name, email: user.email,
+      role: user.role, phone: user.phone, avatar: user.avatar,
+      favoriteIds: [],
+    },
+    ...tokens,
+  };
 };
 
 // ─── Login ───────────────────────────────────────────────────────
@@ -38,8 +47,19 @@ const login = async ({ email, password }) => {
   }
   if (user.isBanned) throw new AppError('Your account has been suspended', 403);
 
+  // Fetch favorite property IDs
+  const favorites = await prisma.favorite.findMany({ where: { userId: user.id }, select: { propertyId: true } });
+  const favoriteIds = favorites.map(f => String(f.propertyId));
+
   const tokens = createTokens(user.id);
-  return { user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar, phone: user.phone }, ...tokens };
+  return {
+    user: {
+      id: user.id, name: user.name, email: user.email,
+      role: user.role, avatar: user.avatar, phone: user.phone,
+      favoriteIds,
+    },
+    ...tokens,
+  };
 };
 
 // ─── Get Me ──────────────────────────────────────────────────────
@@ -52,7 +72,7 @@ const getMe = async (id) => {
 // ─── Update Me ───────────────────────────────────────────────────
 const updateMe = async (id, data) => {
   const filtered = {};
-  ['name', 'phone', 'bio', 'role'].forEach(f => { if (data[f] !== undefined) filtered[f] = data[f]; });
+  ['name', 'phone', 'bio', 'role', 'email'].forEach(f => { if (data[f] !== undefined) filtered[f] = data[f]; });
   return repo.updateById(id, filtered);
 };
 

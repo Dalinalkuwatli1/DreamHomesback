@@ -103,7 +103,7 @@ model Property {
 model Image {
   id         Int      @id @default(autoincrement())
   url        String
-  publicId   String
+  publicId   String?
   propertyId Int
   createdAt  DateTime @default(now())
 

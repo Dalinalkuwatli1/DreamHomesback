@@ -55,17 +55,40 @@ const getById = async (id) => {
   return property;
 };
 
+// ─── Sanitize FormData body ───────────────────────────────────────
+const sanitizeBody = (data) => {
+  // features[] comes from FormData as 'features[]' key — normalize it
+  const features = data['features[]'] || data.features || [];
+  const featureList = Array.isArray(features) ? features : [features];
+
+  // Only keep fields that exist in Prisma schema
+  return {
+    title:        data.title,
+    description:  data.description,
+    type:         data.type,         // SALE / RENT (PropertyType enum)
+    propertyType: data.propertyType, // Apartment, Villa etc (String?)
+    price:        parseFloat(data.price),
+    area:         parseFloat(data.area) || 0,
+    bedrooms:     parseInt(data.bedrooms) || 0,
+    bathrooms:    parseInt(data.bathrooms) || 0,
+    city:         data.city,
+    address:      data.address || null,
+    features:     featureList.length > 0 ? featureList : undefined,
+  };
+};
+
 // ─── Create ──────────────────────────────────────────────────────
 const create = async (data, files, ownerId) => {
-  const images = files?.map(f => ({ url: f.path, publicId: f.filename })) || [];
+  const images = files?.map(f => ({ url: f.path, publicId: f.filename || '' })) || [];
+  if (images.length === 0 && data.imageUrl) {
+    images.push({ url: data.imageUrl, publicId: '' });
+  }
+  const clean = sanitizeBody(data);
   return repo.create({
-    ...data,
-    price:    parseFloat(data.price),
-    bedrooms: parseInt(data.bedrooms) || 0,
-    bathrooms:parseInt(data.bathrooms) || 0,
-    area:     parseFloat(data.area) || 0,
+    ...clean,
     ownerId,
-    images:   { create: images },
+    status: 'ACTIVE',          // Auto-approve for owners
+    images: { create: images },
   });
 };
 
@@ -75,9 +98,13 @@ const update = async (id, data, files, userId) => {
   if (!property) throw new AppError('Property not found', 404);
   if (property.ownerId !== userId) throw new AppError('Not authorized to update this property', 403);
 
-  const newImages = files?.map(f => ({ url: f.path, publicId: f.filename })) || [];
+  const newImages = files?.map(f => ({ url: f.path, publicId: f.filename || '' })) || [];
+  if (newImages.length === 0 && data.imageUrl) {
+    newImages.push({ url: data.imageUrl, publicId: '' });
+  }
+  const clean = sanitizeBody(data);
   return repo.updateById(id, {
-    ...data,
+    ...clean,
     ...(newImages.length && { images: { create: newImages } }),
   });
 };
