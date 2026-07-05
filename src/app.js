@@ -19,7 +19,8 @@ const adminRoutes        = require('./modules/admin/admin.routes');
 
 const app = express();
 
-// ─── Global Middlewares ──────────────────────────────────────────
+// Trust proxy settings (required for Render/Railway/Vercel rate limiters)
+app.set('trust proxy', 1);
 // Security headers
 app.use(helmet());
 
