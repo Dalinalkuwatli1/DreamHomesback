@@ -1,5 +1,11 @@
 # <p align="center">🏠 DreamHomes Backend API</p>
 
+![Node.js](https://img.shields.io/badge/Node.js-20-green)
+![Express](https://img.shields.io/badge/Express.js-Backend-black)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 <p align="center">
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
   <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
@@ -24,6 +30,16 @@ Below is the complete architectural flowchart of the backend system, showing the
 </p>
 
 ---
+## 📋 Project Info
+
+| Item | Value |
+|------|-------|
+| Backend | Node.js + Express |
+| Database | PostgreSQL (Supabase) |
+| ORM | Prisma |
+| Authentication | JWT |
+| Deployment | Render |
+| Architecture | MVC |
 
 ## 🚀 Features
 
