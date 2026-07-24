@@ -41,16 +41,16 @@ Below is the complete architectural flowchart of the backend system, showing the
 | Deployment | Render |
 | Architecture | MVC |
 
-## 🚀 Features
+##  Features
 
-- 🔐 **Secure Authentication:** JWT authentication with access tokens and secure, HTTP-only refresh token cookies.
-- 🛡️ **Role-Based Access Control (RBAC):** Separate routes and permission scopes for `USER`, `AGENT`, and `ADMIN`.
-- 🏠 **Property Management:** Comprehensive CRUD operations for listing, updating, deleting, and searching luxury homes.
-- ❤️ **Favorites System:** Custom list of favorites per user with database synchronization.
-- 💬 **Real-time Messaging:** Direct chat communication with prospective buyers/agents.
-- 🔔 **Instant Notifications:** Real-time push updates for chat messages and system events.
-- 👨‍💼 **Admin Control Panel:** Dedicated analytics, user banning/unbanning, and platform moderation tools.
-- 🗄️ **Prisma ORM:** Simplified and safe database access, schema-first design, and seamless migrations.
+-  **Secure Authentication:** JWT authentication with access tokens and secure, HTTP-only refresh token cookies.
+-  **Role-Based Access Control (RBAC):** Separate routes and permission scopes for `USER`, `AGENT`, and `ADMIN`.
+-  **Property Management:** Comprehensive CRUD operations for listing, updating, deleting, and searching luxury homes.
+-  **Favorites System:** Custom list of favorites per user with database synchronization.
+-  **Real-time Messaging:** Direct chat communication with prospective buyers/agents.
+-  **Instant Notifications:** Real-time push updates for chat messages and system events.
+- **Admin Control Panel:** Dedicated analytics, user banning/unbanning, and platform moderation tools.
+-  **Prisma ORM:** Simplified and safe database access, schema-first design, and seamless migrations.
 
 ---
 
